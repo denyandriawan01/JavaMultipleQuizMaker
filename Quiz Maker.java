@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -33,14 +34,14 @@ public class Main {
         s.nextLine();
     }
 
-		public static void clearConsole(){
+    public static void clearConsole(){
         try{
             if(System.getProperty("os.name").contains("Windows")){
                 new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
             } else{
                 System.out.print("\033\143");
             }
-        } catch (Exception e) {
+        } catch (IOException | InterruptedException e) {
             System.out.print("");
         }
     }
@@ -56,7 +57,7 @@ public class Main {
         int Menu,  Update, Temp = 0, Point = 0;
 
         do {
-						clearConsole();
+            clearConsole();
             Logo(); Menu();
             try {
                 Menu = input.nextInt();
@@ -74,14 +75,11 @@ public class Main {
                             System.out.print(" | [>] Question number - " + (i + 1) + ": ");
                             Question[i] = input.nextLine();
                             for (int j = 0; j < 4; j++) {
-                                if (j == 0){
-                                    System.out.print(" |    [>] Input multiple A: ");
-                                } else if (j == 1) {
-                                    System.out.print(" |    [>] Input multiple B: ");
-                                } else if (j == 2) {
-                                    System.out.print(" |    [>] Input multiple C: ");
-                                } else {
-                                    System.out.print(" |    [>] Input multiple D: ");
+                                switch (j) {
+                                    case 0 -> System.out.print(" |    [>] Input multiple A: ");
+                                    case 1 -> System.out.print(" |    [>] Input multiple B: ");
+                                    case 2 -> System.out.print(" |    [>] Input multiple C: ");
+                                    default -> System.out.print(" |    [>] Input multiple D: ");
                                 }
                                 MultipleChoice[i][j] = input.nextLine();
                             }
@@ -112,56 +110,51 @@ public class Main {
                     if (Temp == 0){
                         System.out.println(" | [!] Empty array [!]");
                     } else {
-												System.out.print(" | [>] Update at number-: ");
-                    		try {
-                        	Update = input.nextInt();
-                        	input.nextLine();
-                    		} catch (Exception e){
-                        	input.nextLine();
-                        	continue;
-                    		}
+                        System.out.print(" | [>] Update at number-: ");
+                        try {
+                            Update = input.nextInt();
+                            input.nextLine();
+                        } catch (Exception e){
+                            input.nextLine();
+                            continue;
+                        }
                         for (int i = 0; i < Temp; i++) {
                             if (Update - 1 == i) {
-																clearConsole();
-																// Before Update
-																System.out.print("===============================================\n");
-																System.out.println("Before edit");
-																System.out.println("-----------");
-																System.out.println("[" + (i + 1) + "] " + Question[i]);
-																for (int j = 0; j < 4; j++) {
-                                	if (j == 0) {
-                                    System.out.println(" | A. " + MultipleChoice[i][j]);
-                                	} else if (j == 1) {
-                                    System.out.println(" | B. " + MultipleChoice[i][j]);
-                                	} else if (j == 2) {
-                                    System.out.println(" | C. " + MultipleChoice[i][j]);
-                                	} else {
-                                    System.out.println(" | D. " + MultipleChoice[i][j]);
-                                	}
-                            		}
-																System.out.print("===============================================\n");
-																// Going Update
-																System.out.println("Edit");
-																System.out.println("-----------");
+                                System.out.println(" |     [>] Number " + Update + " found");
+                                System.out.println(" | ");
+                                pressEnterKeyToContinue();
+                                clearConsole();
+                                // Before Update
+                                System.out.print("===============================================\n");
+                                System.out.println("Before edit");
+                                System.out.println("-----------");
+                                System.out.println("[" + (i + 1) + "] " + Question[i]);
+                                for (int j = 0; j < 4; j++) {
+                                    switch (j) {
+                                        case 0 -> System.out.println(" | A. " + MultipleChoice[i][j]);
+                                        case 1 -> System.out.println(" | B. " + MultipleChoice[i][j]);
+                                        case 2 -> System.out.println(" | C. " + MultipleChoice[i][j]);
+                                        default -> System.out.println(" | D. " + MultipleChoice[i][j]);
+                                    }
+                                }
+                                System.out.print("===============================================\n");
+                                // Going Update
+                                System.out.println("Edit");
+                                System.out.println("-----------");
                                 System.out.print(" | [>] Question number - " + (i + 1) + ": ");
                                 Question[i] = input.nextLine();
                                 for (int j = 0; j < 4; j++) {
-                                    if (j == 0) {
-                                        System.out.print(" |    [>] Input multiple A: ");
-                                    } else if (j == 1) {
-                                        System.out.print(" |    [>] Input multiple B: ");
-                                    } else if (j == 2) {
-                                        System.out.print(" |    [>] Input multiple C: ");
-                                    } else {
-                                        System.out.print(" |    [>] Input multiple D: ");
+                                    switch (j) {
+                                        case 0 -> System.out.print(" |    [>] Input multiple A: ");
+                                        case 1 -> System.out.print(" |    [>] Input multiple B: ");
+                                        case 2 -> System.out.print(" |    [>] Input multiple C: ");
+                                        default -> System.out.print(" |    [>] Input multiple D: ");
                                     }
                                     MultipleChoice[i][j] = input.nextLine();
                                 }
                                 System.out.print(" |    [*] Correct answer  : ");
                                 CorrectAnswer[i] = input.next().charAt(0);
-                            } else if (Update != i){
-															System.out.println(" | [!] Input not valid [!]");
-														}
+                            }
                         }
                     }
                     pressEnterKeyToContinue();
@@ -170,20 +163,17 @@ public class Main {
                     if (Temp == 0){
                         System.out.println(" | [!] Empty array [!]");
                     } else {
-												clearConsole();
-												System.out.println("Preview Quiz");
+                        clearConsole();
+                        System.out.println("Preview Quiz");
                         System.out.print("===============================================\n");
                         for (int i = 0; i < Temp; i++) {
                             System.out.println("[" + (i + 1) + "] " + Question[i]);
                             for (int j = 0; j < 4; j++) {
-                                if (j == 0) {
-                                    System.out.println(" | A. " + MultipleChoice[i][j]);
-                                } else if (j == 1) {
-                                    System.out.println(" | B. " + MultipleChoice[i][j]);
-                                } else if (j == 2) {
-                                    System.out.println(" | C. " + MultipleChoice[i][j]);
-                                } else {
-                                    System.out.println(" | D. " + MultipleChoice[i][j]);
+                                switch (j) {
+                                    case 0 -> System.out.println(" | A. " + MultipleChoice[i][j]);
+                                    case 1 -> System.out.println(" | B. " + MultipleChoice[i][j]);
+                                    case 2 -> System.out.println(" | C. " + MultipleChoice[i][j]);
+                                    default -> System.out.println(" | D. " + MultipleChoice[i][j]);
                                 }
                             }
                             System.out.print("===============================================\n");
@@ -195,20 +185,17 @@ public class Main {
                     if (Temp == 0){
                         System.out.println(" | [!] Empty array [!]");
                     } else {
-												clearConsole();
+                        clearConsole();
                         System.out.print("===============================================\n");
                         for (int i = 0; i < Temp; i++) {
                             System.out.println("Correct " + Point + "/" + Temp);
                             System.out.println("[" + (i + 1) + "] " + Question[i]);
                             for (int j = 0; j < 4; j++) {
-                                if (j == 0) {
-                                    System.out.println(" | A. " + MultipleChoice[i][j]);
-                                } else if (j == 1) {
-                                    System.out.println(" | B. " + MultipleChoice[i][j]);
-                                } else if (j == 2) {
-                                    System.out.println(" | C. " + MultipleChoice[i][j]);
-                                } else {
-                                    System.out.println(" | D. " + MultipleChoice[i][j]);
+                                switch (j) {
+                                    case 0 -> System.out.println(" | A. " + MultipleChoice[i][j]);
+                                    case 1 -> System.out.println(" | B. " + MultipleChoice[i][j]);
+                                    case 2 -> System.out.println(" | C. " + MultipleChoice[i][j]);
+                                    default -> System.out.println(" | D. " + MultipleChoice[i][j]);
                                 }
                             }
                             System.out.print("[>] Your answer: ");
@@ -231,15 +218,15 @@ public class Main {
                     pressEnterKeyToContinue();
                     break;
                 case 6: // List answer with arraylist
-										if (Temp == 0){
-											System.out.println(" | [!] Empty array [!]");
-										} else {
-											CA.clear();
-											for (int i = 0; i < Temp; i++){
-                        CA.add(Character.toUpperCase(CorrectAnswer[i]));
-                      }
-											System.out.println(" | Correct Answer: " + CA);
-										}
+                    if (Temp == 0){
+                        System.out.println(" | [!] Empty array [!]");
+                    } else {
+                        CA.clear();
+                        for (int i = 0; i < Temp; i++){
+                            CA.add(Character.toUpperCase(CorrectAnswer[i]));
+                        }
+                        System.out.println(" | Correct Answer: " + CA);
+                    }
                     pressEnterKeyToContinue();
                     break;
                 case 7: exit(0);
